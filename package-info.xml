@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>Spuds:DescriptiveLinks</id>
+	<name>Descriptive Links</name>
+	<version>1.0</version>
+	<type>modification</type>
+
+	<install for="2.0 - 2.0.99">
+		<database>add_settings.php</database>
+		<readme type="file" parsebbc="true">readme.txt</readme>
+		<modification type="file">install20.xml</modification>
+		<require-file name="Subs-DescriptiveLinks.php" destination="$sourcedir" />
+		<require-file name="DescriptiveLinks_integration.php" destination="$sourcedir" />
+		<code>add_remove_hooks.php</code>
+		<modification>language.xml</modification>
+		<modification>language-utf8.xml</modification>
+		<redirect url="?action=admin;area=modsettings;sa=dlinks" timeout="6000">redirect.txt</redirect>
+	</install>
+	
+	<uninstall for="2.0 - 2.0.99">
+		<readme type="file" parsebbc="true">readme-uninstall.txt</readme>
+		<code>add_remove_hooks.php</code>
+		<modification type="file" reverse="true">install20.xml</modification>
+		<modification type="file" reverse="true">language.xml</modification>
+		<modification type="file" reverse="true">language-utf8.xml</modification>
+		<remove-file name="$sourcedir/Subs-DescriptiveLinks.php" />
+		<remove-file name="$sourcedir/DescriptiveLinks_integration.php" />
+	</uninstall>
+
+</package-info>

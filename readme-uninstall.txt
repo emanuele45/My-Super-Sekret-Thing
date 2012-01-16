@@ -1,0 +1,10 @@
+[color=blue][b]Uninstalling:[/b][/color]
+If you are permanently removing this mod, and not updating to a new version, and would like to remove all settings from the database, please do the following:
+[list]
+[li]Uninstall as normal[/li]
+[li]Extract the optional remove_settings.php file from this package file[/li]
+[li]Copy the remove_settings.php file to the forum root directory, where SSI.php is located[/li]
+[li]Run remove_settings.php from the browser e.g. http://www.yourforum.com/remove_settings.php[/li]
+[li]Delete the remove_settings.php file[/li]
+[li]Enjoy a frosty beverage[/li]
+[/list]

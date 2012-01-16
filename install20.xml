@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- --------------------------------------------------------------------------
+  Package "Descriptive Links" Mod for Simple Machines Forum (SMF) V2.0
+  Author Spuds
+  License This Source Code is subject to the terms of the Mozilla Public License
+   - version 2.0 (the "License"). You can obtain a copy of the License at
+   - http://mozilla.org/MPL/2.0/.
+--------------------------------------------------------------------------- -->
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>Spuds:DescriptiveLinks</id>
+	<version>1.1</version>
+
+	<file name="$sourcedir/Subs-Post.php">
+		<operation>
+			<search position="before"><![CDATA[	// You won't believe this - but too many periods upsets apache it seems!
+	$message = preg_replace('~\.{100,}~', '...', $message);]]></search>
+			<add><![CDATA[
+
+	// MOD Descriptive links, If asked, lets create a nice title for the link [url=ddd]great title[/url]
+	if (!empty($modSettings['descriptivelinks_enabled']) && !$previewing && !empty($modSettings['descriptivelinks_title_url']) && empty($_POST['disable_title_convert_url']) && empty($_REQUEST['nt'])) 
+		Add_title_to_link($message);
+
+	]]></add>
+		</operation>
+	</file>
+	
+	<file name="$sourcedir/Post.php">
+		<operation>
+			<search position="before"><![CDATA[$context['locked'] = !empty($locked) || !empty($_REQUEST['lock']);]]></search>
+			<add><![CDATA[
+
+	// Can this person turn of link titles?
+	$context['can_disable_title_convert_url'] = allowedTo('disable_title_convert_url');]]></add>
+		</operation>
+		
+	</file>
+		
+	<file name="$themedir/Post.template.php">
+		<operation>
+			<search position="before"><![CDATA[approve_this_post'] . '</label></li>' : '', ']]></search>
+			<add><![CDATA[
+							', $context['can_disable_title_convert_url'] ? '<li><label for="check_disable_title_convert_url"><input type="checkbox" name="nt" id="check_disable_title_convert_url" class="input_check" value="NT" /> ' . $txt['disable_title_convert_url'] . '</label></li>' : '', ']]></add>
+		</operation>
+		
+		<operation>
+			<search position="replace"><![CDATA[					var checkboxFields = [
+						\'ns\'
+					];]]></search>
+			<add><![CDATA[					var checkboxFields = [
+						\'ns\',\'nt\'
+					];]]></add>
+		</operation>
+	</file>
+
+</modification>
