@@ -74,8 +74,8 @@ function Add_title_to_link(&$message, $id_msg = -1)
 		}
 
 		// Find all (non bbc) links in this message and wrap them in a custom bbc url tag so we can review em.
-		$message = preg_replace('~((?<=[\s>\.(;\'"]|^)(http(s?):\/\/)|((?<=[\s>(\'<]|^)www\.[^ \[\]\(\)\n\r\t]+)|(([012]?[0-9]{1,2}\.){3}[012]?[0-9]{1,2})\/)([^ \[\]\(\),"\'<>\n\r\t]+)([^\. \[\]\(\),;"\'<>\n\r\t])|(([012]?[0-9]{1,2}\.){3}[012]?[0-9]{1,2})~i' . ($context['utf8'] ? 'u' : ''), '[%url]$0[/url%]', $message);
-
+		$message = preg_replace('~((?:(?<=[\s>\.\(;\'"]|^)(https?:\/\/))|(?:(?<=[\s>\'<]|^)www\.[^ \[\]\(\)\n\r\t]+)|((?:(?<=[\s\n\r\t]|^))(?:[012]?[0-9]{1,2}\.){3}[012]?[0-9]{1,2})\/)([^ \[\]\(\),"\'<>\n\r\t]+)([^\. \[\]\(\),;"\'<>\n\r\t])|((?:(?<=[\s\n\r\t]|^))(?:[012]?[0-9]{1,2}\.){3}[012]?[0-9]{1,2})~i' . ($context['utf8'] ? 'u' : ''), '[%url]$0[/url%]', $message);
+		
 		// Find the special bbc urls that we just created, if any, so we can run through them and get titles
 		$urls = array();
 		preg_match_all("~\[%url\](.+?)\[/url%\]~ism", $message, $urls);
@@ -85,7 +85,7 @@ function Add_title_to_link(&$message, $id_msg = -1)
 			$timeout = ini_get('default_socket_timeout');
 			@ini_set('default_socket_timeout', 3);
 
-			//init
+			// init
 			$conversions = 0;
 			$internal = !empty($modSettings['queryless_urls']) ? $boardurl : $scripturl;
 			require_once ($sourcedir . '/Subs-Package.php');
@@ -247,7 +247,6 @@ function Load_topic_subject($url)
 		// Found the topic data, load the subject er I mean title !
 		list($title) = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
-
 
 		// clean it up a bit
 		$title = trim(str_replace($txt['response_prefix'], '', $title));
