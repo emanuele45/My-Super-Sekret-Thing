@@ -53,13 +53,14 @@ function Add_title_to_link(&$message, $id_msg = -1)
 		if (!empty($modSettings['aeva_enable']) || !empty($modSettings['descriptivelinks_title_bbcurl']))
 		{
 			// maybe its [url=http://bbb.bbb.bbb]bbb.bbb.bbb[/url]
+			$pre_urls = array();
 			preg_match_all("~\[url=(http(?:s)?:\/\/(.+?))\](?:http(?:s)?:\/\/)?(.+?)\[/url\]~si" . ($context['utf8'] ? 'u' : ''), $message, $pre_urls, PREG_SET_ORDER);
 			foreach ($pre_urls as $url_check)
 			{
-				if (isset($url_check[2]) && isset($url_check[3]) && ($url_check[2] == $url_check[3]))
+				if (isset($url_check[2]) && isset($url_check[3]) && ($url_check[2] === $url_check[3]))
 				{
 					// the link IS the same as the title ... so set it to be a non bbc link so we can work on it
-					$url_check[2] = trim((strpos($url_check[2], 'http://') === false ? 'http://' . $url_check[2] : $url_check[2]));
+					$url_check[2] = trim((strpos($url_check[2], 'http://') === false && strpos($url_check[2], 'https://') === false) ? 'http://' . $url_check[2] : $url_check[2]);
 					$message = str_replace($url_check[0], $url_check[2], $message);
 				}
 			}
@@ -75,7 +76,7 @@ function Add_title_to_link(&$message, $id_msg = -1)
 
 		// Find all (non bbc) links in this message and wrap them in a custom bbc url tag so we can review em.
 		$message = preg_replace('~((?:(?<=[\s>\.\(;\'"]|^)(https?:\/\/))|(?:(?<=[\s>\'<]|^)www\.[^ \[\]\(\)\n\r\t]+)|((?:(?<=[\s\n\r\t]|^))(?:[012]?[0-9]{1,2}\.){3}[012]?[0-9]{1,2})\/)([^ \[\]\(\),"\'<>\n\r\t]+)([^\. \[\]\(\),;"\'<>\n\r\t])|((?:(?<=[\s\n\r\t]|^))(?:[012]?[0-9]{1,2}\.){3}[012]?[0-9]{1,2})~i' . ($context['utf8'] ? 'u' : ''), '[%url]$0[/url%]', $message);
-		
+
 		// Find the special bbc urls that we just created, if any, so we can run through them and get titles
 		$urls = array();
 		preg_match_all("~\[%url\](.+?)\[/url%\]~ism", $message, $urls);
@@ -95,7 +96,7 @@ function Add_title_to_link(&$message, $id_msg = -1)
 			{
 				// Make sure the link is lower case and leads with http:// so fetch web data does not drop a spacely space sprocket
 				$url_temp = str_replace(array('HTTP://', 'HTTPS://'), array('http://', 'https://'), $url);
-				$url_return = $url_modified = trim((strpos($url_temp, 'http://') === false ? 'http://' . $url_temp : $url_temp));
+				$url_return = $url_modified = trim((strpos($url_temp, 'http://') === false && strpos($url_temp, 'https://') === false) ? 'http://' . $url_temp : $url_temp);
 
 				// make sure there is a trailing '/' *when needed* so fetch_web_data does not blow a cogswell cog
 				$urlinfo = parse_url($url_modified);
