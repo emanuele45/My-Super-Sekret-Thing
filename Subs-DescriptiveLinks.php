@@ -213,6 +213,7 @@ function Load_topic_subject($url)
 	$title = false;
 
 	// Find the topic or message number in this link
+	$match = array();
 	if (preg_match('`' . $pattern_message . '`i' . ($context['utf8'] ? 'u' : ''), $url, $match))
 	{
 		// found the topic number .... lets get the subject
